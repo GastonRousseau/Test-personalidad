@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Viral - ¿Qué personaje de película eres?</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        
+        :root {
+            --dark-blue: #0F1624;
+            --medium-blue: #1A2238;
+            --accent-blue: #2A3C67;
+            --light-violet: #8B5CF6;
+            --bright-violet: #A78BFA;
+            --neon-violet: #C084FC;
+            --dark-violet: #4C1D95;
+            --card-bg: rgba(26, 32, 44, 0.7);
+            --text-primary: #E2E8F0;
+            --text-secondary: #A0AEC0;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--dark-blue), var(--dark-violet));
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px 0;
+            background-attachment: fixed;
+        }
+        
+        .container {
+            max-width: 850px;
+            margin: auto;
+            background: rgba(15, 23, 42, 0.7);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+        }
+        
+        .header {
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-weight: 700;
+            font-size: 2.3rem;
+            background: linear-gradient(90deg, var(--light-violet), var(--neon-violet));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 15px;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
+        
+        .progress-container {
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            margin: 20px 0;
+            overflow: hidden;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, var(--light-violet), var(--neon-violet));
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 50px;
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+        }
+        
+        .question {
+            display: none;
+            padding: 25px;
+            background: var(--card-bg);
+            border-radius: 15px;
+            margin-bottom: 20px;
+            animation: fadeIn 0.5s;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .question p {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(139, 92, 246, 0.3);
+            padding-bottom: 15px;
+        }
+        
+        .show {
+            display: block;
+        }
+        
+        .options-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 15px;
+        }
+        
+        .option-btn {
+            background: rgba(44, 55, 103, 0.5);
+            border: 1px solid var(--light-violet);
+            color: var(--text-primary);
+            padding: 15px 10px;
+            cursor: pointer;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .option-btn:hover {
+            background: rgba(139, 92, 246, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 7px 14px rgba(0, 0, 0, 0.2), 0 0 10px rgba(139, 92, 246, 0.3);
+            border-color: var(--neon-violet);
+        }
+        
+        .option-btn:active {
+            transform: translateY(1px);
+        }
+        
+        .option-btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.2), transparent);
+            transition: all 0.5s;
+        }
+        
+        .option-btn:hover::before {
+            left: 100%;
+        }
+        
+        .result-container {
+            display: none;
+            animation: fadeInUp 1s;
+        }
+        
+        .result-content {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .result-header {
+            margin-bottom: 25px;
+        }
+        
+        .result-title {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--light-violet), var(--neon-violet));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 10px;
+            text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .result-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+        
+        .result-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 25px;
+            align-items: center;
+        }
+        
+        @media (max-width: 768px) {
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .result-img-container {
+            display: flex;
+            justify-content: center;
+        }
+        
+        .result-img {
+            width: 250px;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            border: 3px solid var(--light-violet);
+        }
+        
+        .result-details {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .result-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--text-primary);
+        }
+        
+        .result-movie {
+            font-size: 1rem;
+            color: var(--light-violet);
+            margin-bottom: 15px;
+        }
+        
+        .char-description {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: var(--text-primary);
+            text-align: left;
+        }
+        
+        .char-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .stat-bar {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 5px;
+        }
+        
+        .stat-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--light-violet), var(--neon-violet));
+            border-radius: 5px;
+        }
+        
+        .char-traits {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .trait {
+            background: rgba(139, 92, 246, 0.15);
+            padding: 8px 15px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+        
+        .quote {
+            font-style: italic;
+            border-left: 3px solid var(--light-violet);
+            padding-left: 15px;
+            margin: 15px 0;
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+        
+        .share-container {
+            margin: 30px 0 10px;
+            text-align: center;
+        }
+        
+        .share-btn {
+            margin: 5px;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .facebook-btn {
+            background: #3b5998;
+            color: white;
+        }
+        
+        .twitter-btn {
+            background: #1da1f2;
+            color: white;
+        }
+        
+        .whatsapp-btn {
+            background: #25d366;
+            color: white;
+        }
+        
+        .instagram-btn {
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            color: white;
+        }
+        
+        .restart-btn {
+            background: var(--dark-violet);
+            color: white;
+            border: 1px solid var(--light-violet);
+        }
+        
+        .share-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 14px rgba(0, 0, 0, 0.2);
+        }
+        
+        .related-tests {
+            margin-top: 30px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 15px;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+        }
+        
+        .related-tests h3 {
+            font-size: 1.3rem;
+            background: linear-gradient(90deg, var(--light-violet), var(--neon-violet));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 15px;
+        }
+        
+        .related-test-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .related-test-link {
+            background: rgba(139, 92, 246, 0.1);
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            transition: all 0.3s;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+        
+        .related-test-link:hover {
+            background: rgba(139, 92, 246, 0.2);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .ad-container {
+            margin: 30px 0;
+            padding: 15px;
+            background: var(--card-bg);
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+        }
+        
+        .ad-container p {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            padding: 20px 0;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(139, 92, 246, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(139, 92, 246, 0);
+            }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-film"></i> ¿Qué personaje de película eres?</h1>
+            <p>Descubre qué legendario personaje de cine refleja tu personalidad en 10 preguntas reveladores</p>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        
+        <div id="quiz">
+            <div class="question show" id="q1">
+                <p><i class="fas fa-question-circle"></i> 1. ¿Cuál es tu mayor motivación en la vida?</p>
+                <div class="options-container">
+                    <button class="option-btn" onclick="nextQuestion(1, 'A')">La aventura y descubrir lo desconocido</button>
+                    <button class="option-btn" onclick="nextQuestion(1, 'B')">Adquirir conocimiento y sabiduría</button>
+                    <button class="option-btn" onclick="nextQuestion(1, 'C')">Crear e innovar, dejar un legado</button>
+                    <button class="option-btn" onclick="nextQuestion(1, 'D')">Ayudar a otros y hacer del mundo un lugar mejor</button>
+                    <button class="option-btn" onclick="nextQuestion(1, 'E')">Poder y reconocimiento</button>
+                    <button class="option-btn" onclick="nextQuestion(1, 'F')">Libertad para vivir según mis propias reglas</button>
+                    <button class="option-btn" onclick="nextQuestion(1, 'G')">Buscar la paz interior y la armonía</button>
+                    <button class="option-btn" onclick="nextQuestion(1, 'H')">Explorar nuevas culturas y tradiciones</button>
+                </div>
+            </div>
+            
+            <div class="question" id="q2">
+                <p><i class="fas fa-question-circle"></i> 2. ¿Cómo enfrentas un conflicto?</p>
+                <div class="options-container">
+                    <button class="option-btn" onclick="nextQuestion(2, 'A')">De frente, sin dudar en actuar rápido</button>
+                    <button class="option-btn" onclick="nextQuestion(2, 'B')">Analizando todas las variables antes de decidir</button>
+                    <button class="option-btn" onclick="nextQuestion(2, 'C')">Con ingenio, buscando soluciones creativas</button>
+                    <button class="option-btn" onclick="nextQuestion(2, 'D')">Tratando de entender todas las perspectivas</button>
+                    <button class="option-btn" onclick="nextQuestion(2, 'E')">Planeando estratégicamente cómo obtener ventaja</button>
+                    <button class="option-btn" onclick="nextQuestion(2, 'F')">Improvisando y adaptándome mientras avanzo</button>
+                    <button class="option-btn" onclick="nextQuestion(2, 'G')">Buscando una solución pacífica</button>
+                    <button class="option-btn" onclick="nextQuestion(2, 'H')">Evitando el conflicto y buscando alternativas</button>
+                </div>
+            </div>
+            
+            <div class="question" id="q3">
+                <p><i class="fas fa-question-circle"></i> 3. ¿Qué frase te describe mejor?</p>
+                <div class="options-container">
+                    <button class="option-btn" onclick="nextQuestion(3, 'A')">Vive cada día como si fuera el último</button>
+                    <button class="option-btn" onclick="nextQuestion(3, 'B')">El conocimiento es poder</button>
+                    <button class="option-btn" onclick="nextQuestion(3, 'C')">La imaginación es más importante que el conocimiento</button>
+                    <button class="option-btn" onclick="nextQuestion(3, 'D')">Sé el cambio que quieres ver en el mundo</button>
+                    <button class="option-btn" onclick="nextQuestion(3, 'E')">El fin justifica los medios</button>
+                    <button class="option-btn" onclick="nextQuestion(3, 'F')">Las reglas están hechas para romperse</button>
+                    <button class="option-btn" onclick="nextQuestion(3, 'G')">La paz y la armonía son lo más importante</button>
+                    <button class="option-btn" onclick="nextQuestion(3, 'H')">Explorar y aprender de diferentes culturas</button>
+                </div>
+            </div>
+            
+            <div class="question" id="q4">
+                <p><i class="fas fa-question-circle"></i> 4. ¿Cuál consideras que es tu mayor fortaleza?</p>
+                <div class="options-container">
+                    <button class="option-btn" onclick="nextQuestion(4, 'A')">Mi valor y determinación</button>
+                    <button class="option-btn" onclick="nextQuestion(4, 'B')">Mi intelecto y capacidad de análisis</button>
+                    <button class="option-btn" onclick="nextQuestion(4, 'C')">Mi creatividad e imaginación</button>
+                    <button class="option-btn" onclick="nextQuestion(4, 'D')">Mi empatía y compasión</button>
+                    <button class="option-btn" onclick="nextQuestion(4, 'E')">Mi astucia y ambición</button>
+                    <button class="option-btn" onclick="nextQuestion(4, 'F')">Mi independencia y adaptabilidad</button>
+                    <button class="option-btn" onclick="nextQuestion(4, 'G')">Mi serenidad y sabiduría</button>
+                    <button class="option-btn" onclick="nextQuestion(4, 'H')">Mi curiosidad y deseo de explorar</button>
+                </div>
+            </div>
+            
+            <div class="question" id="q5">
+                <p><i class="fas fa-question-circle"></i> 5. ¿Qué es lo que más te asusta?</p>
+                <div class="options-container">
+                    <button class="option-btn" onclick="nextQuestion(5, 'A')">No haber vivido intensamente</button>
+                    <button class="option-btn" onclick="nextQuestion(5, 'B')">La ignorancia o no entender algo</button>
+                    <button class="option-btn" onclick="nextQuestion(5, 'C')">Perder mi creatividad o libertad de expresión</button>
+                    <button class="option-btn" onclick="nextQuestion(5, 'D')">Ver sufrir a quienes amo</button>
+                    <button class="option-btn" onclick="nextQuestion(5, 'E')">Perder mi poder o influencia</button>
+                    <button class="option-btn" onclick="nextQuestion(5, 'F')">Estar atrapado en una vida sin sentido</button>
+                    <button class="option-btn" onclick="nextQuestion(5, 'G')">Perder la paz interior</button>
+                    <button class="option-btn" onclick="nextQuestion(5, 'H')">No poder explorar el mundo</button>
+                </div>
+            </div>
+            
+            <!-- Mostrar anuncio después de la pregunta 5 -->
+            <div id="midTestAd" style="display: none;">
+                <div class="ad-container">
+                    <p>PUBLICIDAD</p>
+                    <div>
+                        <!-- Aquí iría tu código de Google AdSense -->
+                        <img src="/api/placeholder/300/250" alt="Anuncio" style="max-width: 100%;">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" id="q6">
+                <p><i class="fas fa-question-circle"></i> 6. En tu tiempo libre, ¿qué prefieres hacer?</p>
+                <div class="options-container">
+                    <button class="option-btn" onclick="nextQuestion(6, 'A')">Practicar deportes extremos o actividades al aire libre</button>
+                    <button class="option-btn" onclick="nextQuestion(6, 'B')">Leer, investigar o resolver acertijos</button>
+                    <button class="option-btn" onclick="nextQuestion(6, 'C')">Crear arte, música o escribir</button>
+                    <button class="option-btn" onclick="nextQuestion(6, 'D')">Pasar tiempo con amigos o hacer voluntariado</button>
+                    <button class="option-btn" onclick="nextQuestion(6, 'E')">Planificar mi próximo proyecto o estrategia</button>
+                    <button class="option-btn" onclick="nextQuestion(6, 'F')">Explorar nuevos lugares o experimentar cosas nuevas</button>
+                    <button class="option-btn" onclick="nextQuestion(6, 'G')">Meditar o practicar yoga</button>
+                    <button class="option-btn" onclick="nextQuestion(6, 'H')">Viajar y conocer nuevas culturas</button>
+                </div>
+            </div>
+            
+            <div class="question" id="q7">
+                <p><i class="fas fa-question-circle"></i> 7. ¿Cuál es tu mayor debilidad?</p>
+                <div class="options-container">
+                    <button class="option-btn" onclick="nextQuestion(7, 'A')">A veces actúo sin pensar en las consecuencias</button>
+                    <button class="option-btn" onclick="nextQuestion(7, 'B')">Puedo ser demasiado crítico o distante</button>
+                    <button class="option-btn" onclick="nextQuestion(7, 'C')">Me distraigo fácilmente con nuevas ideas</button>
+                    <button class="option-btn" onclick="nextQuestion(7, 'D')">Me preocupo demasiado por lo que otros piensan</button>
+                    <button class="option-btn" onclick="nextQuestion(7, 'E')">Puedo ser manipulador o demasiado ambicioso</button>
+                    <button class="option-btn" onclick="nextQuestion(7, 'F')">Me cuesta comprometerme o seguir las reglas</button>
+                    <button class="option-btn" onclick="nextQuestion(7, 'G')">A veces soy demasiado pasivo</button>
+                    <button class="option-btn" onclick="nextQuestion(7, 'H')">Puedo ser demasiado curioso y distraerme</button>
+                </div>
+            </div>
+            
+            <div class="question" id="q8">
+                <p><i class="fas fa-question-circle"></i> 8. ¿Qué tipo de historia te atrae más en una película?</p>
+                <div class="options-container">
+                    <button class="option-btn" onclick="nextQuestion(8, 'A')">Acción y aventura épica</button>
+                    <button class="option-btn" onclick="nextQuestion(8, 'B')">Misterio, thriller o ciencia ficción</button>
+                    <button class="option-btn" onclick="nextQuestion(8, 'C')">Historias imaginativas o surrealistas</button>
+                    <button class="option-btn" onclick="nextQuestion(8, 'D')">Dramas humanos o historias de superación</button>
+                    <button class="option-btn" onclick="nextQuestion(8, 'E')">Historias de poder, ambición o supervivencia</button>
+                    <button class="option-btn" onclick="nextQuestion(8, 'F')">Películas de antihéroes o rebeldes</button>
+                    <button class="option-btn" onclick="nextQuestion(8, 'G')">Historias de paz y armonía</button>
+                    <button class="option-btn" onclick="nextQuestion(8, 'H')">Documentales sobre culturas y tradiciones</button>
+                </div>
+            </div>
+            
+            <div class="question" id="q9">
+                <p><i class="fas fa-question-circle"></i> 9. ¿Cómo te ven los demás?</p>
+                <div class="options-container">
+                    <button class="option-btn" onclick="nextQuestion(9, 'A')">Como alguien valiente y decidido</button>
+                    <button class="option-btn" onclick="nextQuestion(9, 'B')">Como una persona inteligente y analítica</button>
+                    <button class="option-btn" onclick="nextQuestion(9, 'C')">Como alguien creativo y original</button>
+                    <button class="option-btn" onclick="nextQuestion(9, 'D')">Como una persona bondadosa y comprensiva</button>
+                    <button class="option-btn" onclick="nextQuestion(9, 'E')">Como alguien astuto y persuasivo</button>
+                    <button class="option-btn" onclick="nextQuestion(9, 'F')">Como una persona independiente y auténtica</button>
+                    <button class="option-btn" onclick="nextQuestion(9, 'G')">Como alguien sabio y sereno</button>
+                    <button class="option-btn" onclick="nextQuestion(9, 'H')">Como una persona curiosa y exploradora</button>
+                </div>
+            </div>
+            
+            <div class="question" id="q10">
+                <p><i class="fas fa-question-circle"></i> 10. Si pudieras cambiar algo del mundo, ¿qué sería?</p>
+                <div class="options-container">
+                    <button class="option-btn" onclick="calculateResult()">Que hubiera más aventuras y menos rutina</button>
+                    <button class="option-btn" onclick="calculateResult()">Que se valorara más el conocimiento y la verdad</button>
+                    <button class="option-btn" onclick="calculateResult()">Que hubiera más libertad para la creatividad</button>
+                    <button class="option-btn" onclick="calculateResult()">Que hubiera más compasión y menos sufrimiento</button>
+                    <button class="option-btn" onclick="calculateResult()">Que se reconociera más el mérito y el esfuerzo</button>
+                    <button class="option-btn" onclick="calculateResult()">Que hubiera menos reglas y más libertad individual</button>
+                    <button class="option-btn" onclick="calculateResult()">Que hubiera más paz y armonía</button>
+                    <button class="option-btn" onclick="calculateResult()">Que hubiera más oportunidades para explorar el mundo</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Contenedor de resultado -->
+        <div id="resultContainer" class="result-container">
+            <div class="result-content">
+                <div class="result-header">
+                    <h2 class="result-title">¡El personaje que refleja tu personalidad es...</h2>
+                    <p class="result-subtitle">Basado en tus respuestas, este es el personaje cinematográfico que mejor te representa:</p>
+                </div>
+                
+                <div class="result-grid">
+                    <div class="result-img-container">
+                        <img id="resultImg" class="result-img" src="" alt="Personaje">
+                    </div>
+                    
+                    <div class="result-details">
+                        <div>
+                            <h3 id="resultName" class="result-name"></h3>
+                            <p id="resultMovie" class="result-movie"></p>
+                        </div>
+                        
+                        <div id="resultDescription" class="char-description"></div>
+                        
+                        <div class="stats-container">
+                            <div>
+                                <small>Valentía</small>
+                                <div class="stat-bar">
+                                    <div id="statValor" class="stat-fill"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <small>Inteligencia</small>
+                                <div class="stat-bar">
+                                    <div id="statInt" class="stat-fill"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <small>Creatividad</small>
+                                <div class="stat-bar">
+                                    <div id="statCreat" class="stat-fill"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <small>Carisma</small>
+                                <div class="stat-bar">
+                                    <div id="statCar" class="stat-fill"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="char-traits">
+                            <span class="trait" id="trait1"></span>
+                            <span class="trait" id="trait2"></span>
+                            <span class="trait" id="trait3"></span>
+                            <span class="trait" id="trait4"></span>
+                        </div>
+                        
+                        <div class="quote" id="resultQuote"></div>
+                    </div>
+                </div>
+                
+                <div class="share-container">
+                    <p><strong>¡Comparte tu resultado con amigos!</strong></p>
+                    <button class="btn share-btn facebook-btn" onclick="shareOnFacebook()">
+                        <i class="fab fa-facebook-f"></i> Facebook
+                    </button>
+                    <button class="btn share-btn twitter-btn" onclick="shareOnTwitter()">
+                        <i class="fab fa-twitter"></i> Twitter
+                    </button>
+                    <button class="btn share-btn whatsapp-btn" onclick="shareOnWhatsApp()">
+                        <i class="fab fa-whatsapp"></i> WhatsApp
+                    </button>
+                    <button class="btn share-btn instagram-btn" onclick="shareOnInstagram()">
+                        <i class="fab fa-instagram"></i> Instagram
+                    </button>
+                    <button class="btn share-btn restart-btn" onclick="restartTest()">
+                        <i class="fas fa-redo"></i> Repetir test
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Anuncio después del resultado -->
+            <div class="ad-container">
+                <p>PUBLICIDAD</p>
+                <div id="ad-placeholder">
+                    <!-- Aquí iría tu código de Google AdSense -->
+                    <img src="/api/placeholder/728/90" alt="Anuncio" style="max-width: 100%;">
+                </div>
+            </div>
+            
+            <!--
+<div class="related-tests">
+                <h3>¡Prueba también estos tests!</h3>
+                <div class="related-test-links">
+                    <a href="#" class="related-test-link">¿Qué superhéroe eres?</a>
+                    <a href="#" class="related-test-link">¿En qué década deberías haber vivido?</a>
+                    <a href="#" class="related-test-link">¿Qué tan millonario serás?</a>
+                    <a href="#" class="related-test-link">¿Qué emoji te representa?</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Anuncio en medio del test -->
+        <div class="ad-container" id="midTestAd" style="display: none;">
+            <p>PUBLICIDAD</p>
+            <div>
+                <!-- Aquí iría tu código de Google AdSense -->
+                <img src="/api/placeholder/300/250" alt="Anuncio" style="max-width: 100%;">
+            </div>
+        </div>
+        
+        <footer>
+            © 2025 Test Viral - Todos los derechos reservados | <a href="#" style="color: rgba(255,255,255,0.6);">Política de Privacidad</a>
+        </footer>
+    </div>
+
+    <script>
+        let answers = {};
+        let currentQuestion = 1;
+        const totalQuestions = 8;
+        
+        // Actualizar la barra de progreso
+        function updateProgressBar() {
+            const progressPercent = ((currentQuestion - 1) / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = progressPercent + '%';
+        }
+        
+        // Ir a la siguiente pregunta
+        function nextQuestion(current, answer) {
+            answers[current] = answer;
+            document.getElementById('q' + current).classList.remove('show');
+            currentQuestion++;
+            
+            // Mostrar anuncio después de la pregunta 4
+            if (current === 4) {
+                document.getElementById('midTestAd').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('midTestAd').style.display = 'none';
+                    document.getElementById('q' + currentQuestion).classList.add('show');
+                }, 3000); // Mostrar anuncio por 3 segundos
+            } else {
+                document.getElementById('q' + currentQuestion).classList.add('show');
+            }
+            
+            updateProgressBar();
+        }
+        
+        // Calcular resultado basado en las respuestas
+        function calculateResult() {
+            // Contar las respuestas
+            let counts = {'A': 0, 'B': 0, 'C': 0, 'D': 0};
+            for (let key in answers) {
+                counts[answers[key]]++;
+            }
+            
+            // Determinar el personaje basado en la respuesta más común
+            let maxCount = 0;
+            let maxType = '';
+            for (let type in counts) {
+                if (counts[type] > maxCount) {
+                    maxCount = counts[type];
+                    maxType = type;
+                }
+            }
+            
+            // Asignar personaje basado en el tipo predominante
+            let characterData = {};
+            
+            switch(maxType) {
+                case 'A':
+                    characterData = {
+                        name: "Indiana Jones",
+                        imgSrc: "/api/placeholder/220/220?text=Indiana+Jones",
+                        description: "Eres valiente, aventurero y siempre dispuesto a enfrentar nuevos desafíos. Como Indiana Jones, tienes un espíritu intrépido y una fuerte determinación. No te gusta quedarte quieto y siempre estás buscando emociones y experiencias nuevas. Aunque a veces puedes ser impulsivo, tu valentía e ingenio te ayudan a superar cualquier obstáculo.",
+                        traits: ["Aventurero", "Valiente", "Ingenioso"]
+                    };
+                    break;
+                case 'B':
+                    characterData = {
+                        name: "Sherlock Holmes",
+                        imgSrc: "/api/placeholder/220/220?text=Sherlock+Holmes",
+                        description: "Eres analítico, observador y extremadamente inteligente. Como Sherlock Holmes, tienes una mente brillante y una capacidad excepcional para resolver problemas complejos. Te gusta analizar cada detalle y encontrar patrones que otros no ven. Aunque a veces puedes parecer distante, tu intelecto y tu dedicación a la verdad son admirables.",
+                        traits: ["Analítico", "Brillante", "Detallista"]
+                    };
+                    break;
+                case 'C':
+                    characterData = {
+                        name: "Tony Stark (Iron Man)",
+                        imgSrc: "/api/placeholder/220/220?text=Tony+Stark",
+                        description: "Eres ingenioso, creativo y confías en tu capacidad para innovar. Como Tony Stark, tienes una mente brillante para la tecnología y un encanto natural. Te gusta pensar fuera de la caja y encontrar soluciones originales a los problemas. Aunque puedes ser algo egocéntrico a veces, tu ingenio y carisma te hacen destacar.",
+                        traits: ["Creativo", "Carismático", "Innovador"]
+                    };
+                    break;
+                case 'D':
+                    characterData = {
+                        name: "Harry Potter",
+                        imgSrc: "/api/placeholder/220/220?text=Harry+Potter",
+                        description: "Eres leal, valiente y te preocupas profundamente por los demás. Como Harry Potter, tienes un fuerte sentido de la justicia y la capacidad de inspirar a quienes te rodean. A pesar de los desafíos que enfrentas, tu compasión y determinación te ayudan a superarlos. Valoras la amistad por encima de todo y siempre estás dispuesto a sacrificarte por los que amas.",
+                        traits: ["Leal", "Valiente", "Compasivo"]
+                    };
+                    break;
+                    case 'E':
+                    characterData = {
+                        name: "Daenerys Targaryen",
+                        imgSrc: "/api/placeholder/220/220?text=Daenerys+Targaryen",
+                        description: "Eres ambicioso, decidido y tienes un fuerte sentido de la justicia. Como Daenerys Targaryen, tienes una visión clara de lo que quieres lograr y no temes enfrentarte a grandes desafíos para conseguirlo. Tu liderazgo y determinación inspiran a otros a seguirte.",
+                        traits: ["Ambicioso", "Decidido", "Justo"]
+                    };
+                    break;
+                case 'F':
+                    characterData = {
+                        name: "Jack Sparrow",
+                        imgSrc: "/api/placeholder/220/220?text=Jack+Sparrow",
+                        description: "Eres libre, ingenioso y siempre buscas la aventura. Como Jack Sparrow, valoras tu independencia y tienes una habilidad única para salir de situaciones difíciles con tu ingenio. Tu espíritu libre y tu carisma te hacen destacar en cualquier situación.",
+                        traits: ["Libre", "Ingenioso", "Carismático"]
+                    };
+                    break;
+                case 'G':
+                    characterData = {
+                        name: "Yoda",
+                        imgSrc: "/api/placeholder/220/220?text=Yoda",
+                        description: "Eres sabio, tranquilo y buscas la paz interior. Como Yoda, tienes una profunda comprensión del mundo y una gran capacidad para guiar a otros. Tu sabiduría y serenidad te permiten enfrentar cualquier desafío con calma y claridad.",
+                        traits: ["Sabio", "Tranquilo", "Guía"]
+                    };
+                    break;
+                case 'H':
+                    characterData = {
+                        name: "Lara Croft",
+                        imgSrc: "/api/placeholder/220/220?text=Lara+Croft",
+                        description: "Eres explorador, curioso y siempre buscas nuevas experiencias. Como Lara Croft, tienes una pasión por descubrir lo desconocido y una gran habilidad para adaptarte a cualquier situación. Tu curiosidad y determinación te llevan a vivir aventuras increíbles.",
+                        traits: ["Explorador", "Curioso", "Determinado"]
+                    };
+                    break;
+                default:
+                    // Si hay un empate o algo inesperado
+                    characterData = getRandomCharacter();
+            }
+            
+            // Actualizar el resultado en la página
+            document.getElementById('resultName').innerText = characterData.name;
+            document.getElementById('resultImg').src = characterData.imgSrc;
+            document.getElementById('resultDescription').innerText = characterData.description;
+            document.getElementById('trait1').innerText = characterData.traits[0];
+            document.getElementById('trait2').innerText = characterData.traits[1];
+            document.getElementById('trait3').innerText = characterData.traits[2];
+            
+            // Ocultar el quiz y mostrar el resultado
+            document.getElementById('quiz').style.display = 'none';
+            document.getElementById('resultContainer').style.display = 'block';
+            
+            // Actualizar barra de progreso al 100%
+            document.getElementById('progressBar').style.width = '100%';
+            
+            // Guardar resultado para compartir
+            window.resultCharacter = characterData.name;
+        }
+        
+        // Personajes adicionales para variedad
+        function getRandomCharacter() {
+            const extraCharacters = [
+                {
+                    name: "Wonder Woman",
+                    imgSrc: "/api/placeholder/220/220?text=Wonder+Woman",
+                    description: "Eres fuerte, compasiva y luchas por la justicia. Como Wonder Woman, tienes una fuerza interior inquebrantable y un profundo sentido de la verdad. Inspiras a otros con tu valentía y determinación, siempre defendiendo lo que es correcto. Tu combinación de fortaleza y empatía te hace un verdadero modelo a seguir.",
+                    traits: ["Fuerte", "Justa", "Inspiradora"]
+                },
+                {
+                    name: "Joker",
+                    imgSrc: "/api/placeholder/220/220?text=Joker",
+                    description: "Eres impredecible, creativo y ves el mundo desde una perspectiva única. Como el Joker, tienes una mente que desafía las convenciones y un sentido del humor peculiar. Aunque tu enfoque puede ser caótico, tu capacidad para pensar fuera de lo establecido te permite ver soluciones que otros no considerarían.",
+                    traits: ["Creativo", "Impredecible", "Original"]
+                },
+                {
+                    name: "Ellen Ripley (Alien)",
+                    imgSrc: "/api/placeholder/220/220?text=Ellen+Ripley",
+                    description: "Eres resiliente, adaptable y extremadamente valiente bajo presión. Como Ellen Ripley, tienes la capacidad de mantener la calma en situaciones extremas y encontrar soluciones prácticas a problemas aparentemente imposibles. Tu fuerza interior y determinación te permiten superar cualquier obstáculo que se presente en tu camino.",
+                    traits: ["Resiliente", "Práctica", "Determinada"]
+                }
+            ];
+            
+            return extraCharacters[Math.floor(Math.random() * extraCharacters.length)];
+        }
+        
+        // Reiniciar el test
+        function restartTest() {
+            document.getElementById('resultContainer').style.display = 'none';
+            document.getElementById('quiz').style.display = 'block';
+            document.getElementById('midTestAd').style.display = 'none';
+            
+            // Reiniciar variables
+            answers = {};
+            currentQuestion = 1;
+            
+            // Ocultar todas las preguntas y mostrar la primera
+            document.querySelectorAll('.question').forEach(q => q.classList.remove('show'));
+            document.getElementById('q1').classList.add('show');
+            
+            // Resetear barra de progreso
+            document.getElementById('progressBar').style.width = '0%';
+        }
+        
+        // Funciones para compartir en redes sociales
+        function shareOnFacebook() {
+            const text = "¡Hice este test y soy " + window.resultCharacter + "! ¿Qué personaje de película eres tú?";
+            const url = encodeURIComponent(window.location.href);
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${encodeURIComponent(text)}`, '_blank');
+        }
+        
+        function shareOnTwitter() {
+            const text = "¡Hice este test y descubrí que soy " + window.resultCharacter + "! ¿Qué personaje de película eres tú? Descúbrelo aquí:";
+            const url = encodeURIComponent(window.location.href);
+            window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${url}`, '_blank');
+        }
+        
+        function shareOnWhatsApp() {
+            const text = "¡Hice este test y descubrí que soy " + window.resultCharacter + "! ¿Qué personaje de película eres tú? Hazlo aquí: " + window.location.href;
+            window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+        }
+        
+        // Inicializar la barra de progreso
+        updateProgressBar();
+    </script>
+</body>
+</html>
